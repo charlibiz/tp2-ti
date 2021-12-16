@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     'fontawesome_free',
-    'requests',
+    'drf_yasg',
     # our apps
     "django_app.apps.DjangoAppConfig",
 ]

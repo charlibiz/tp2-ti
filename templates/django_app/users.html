@@ -90,9 +90,17 @@
     {% endif %}
       </div>
     </div>
-    <div style="float: right;"><button class="btn btn-success">Ajouter</button></div>
+    <form
+        style="float: right;"
+          class="form-inline my-3 my-lg-0 "
+          method="POST"
+          action="{% url 'users' %}"
+        >
+          {% csrf_token %}
+          <button class="btn btn-success" type="submit"><i class="fas fa-plus"></i> Ajouter</button>
+        </form>
   </div>
 </div>
-  </div>
+</div>
 
 {% endblock %}
