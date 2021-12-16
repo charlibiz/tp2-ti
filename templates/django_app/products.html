@@ -1,0 +1,163 @@
+{% extends '../base.html' %}
+
+
+{% block title %}Produits{% endblock %}
+
+{% block content %}
+{% include './navbar.html' %}
+<div class="container-fluid" >
+  <div >
+    <div class="card-body">
+      <form class="form-inline my-3 my-lg-0" method="POST" action="{% url 'products' %}">
+        {% csrf_token %}
+        <div class="input-group input-group-lg">
+            <input type="search" class="form-control" placeholder="Produits" name="input" value="{{ current_name }}">
+            <div class="input-group-append">
+              <button class="btn btn-secondary" type="submit"><i class="fas fa-search"></i></button>
+            </div>
+          </div>
+      </form>
+    </div>
+  </div>
+  
+  {% if categories %}
+  <div class="container-fluid" >
+    <div class="card" style="width: 22rem;">
+      <h2 class="card-title"> Catégories</h2>
+      <div class="list-group">
+        {% for object in categories %}
+        <form method="POST" action="{% url 'products' %}">
+          {% csrf_token %}
+          <button class="list-group-item list-group-item-action" type="submit" name="categorieid" value="{{ object.id }}">
+            <h4><span class="badge">
+              {{ object.label }}
+            </span></h4>
+          </button>
+        </form>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+  {% if productsbycategorie %}
+  <table class="table table-hover table-striped ">
+    <thead>
+      <tr>
+        <th scope="col">ID<button type="button" class="btn btn-outline-light"><i class="fas fa-sort"></i></button></th>
+        <th scope="col">Image<button type="button" class="btn btn-outline-light" disabled><i class="fas fa-sort"></th>
+        <th scope="col">Nom<button type="button" class="btn btn-outline-light"><i class="fas fa-sort"></i></button></th>
+        <th scope="col">Prix<button type="button" class="btn btn-outline-light"><i class="fas fa-sort"></i></button></th>
+        <th scope="col">Quantité<button type="button" class="btn btn-outline-light"><i class="fas fa-sort"></i></button></th>
+        <th scope="col">Commander<button type="button" class="btn btn-outline-light" disabled><i class="fas fa-sort"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for object in productsbycategorie %}
+      {% if object.id is null %}
+        <tr style="background-color: #eda49f;">
+          <th scope="row"></th>
+          <td>{{ object }}</td>
+        </tr>
+        {% else %}
+          {% if object.stock_reel is null or object.stock_reel == 0 %}
+           <tr>
+              <th scope="row">{{ object.id }}</th>
+              <th scope="row"><img class="img-thumbnail" style="width: 70px;" src="https://tp3dolibarr.s3.ca-central-1.amazonaws.com/cloudImg/{{ object.ref }}.jpg"/></th>
+              <td>{{ object.label }}</td>
+
+             {% if object.price_base_type is null %}
+              <td> {{ object.price|floatformat:2 }}$</td>
+             {% else %}
+              <td> {{ object.price|floatformat:2 }}$</td>
+             {% endif %}
+
+            <td style="color: #ff040f;"> 0 </td>
+            <td><form method="POST" action="{% url 'order' %}">{% csrf_token %}<button class="btn btn-primary" type="submit" name="orderid" value="{{ object.id }}" disabled><i class="fas fa-box-open"></i></button></form></td>
+          </tr>
+        {% else %}
+          <tr>
+            <th scope="row">{{ object.id }}</th>
+            <th scope="row"><img class="img-thumbnail" style="width: 70px;" src="https://tp3dolibarr.s3.ca-central-1.amazonaws.com/cloudImg/{{ object.ref }}.jpg"/></th>
+            <td>{{ object.label }}</td>
+
+             {% if object.price_base_type is null %}
+              <td> {{ object.price }} HT </td>
+             {% else %}
+              <td> {{ object.price|floatformat:2 }}$</td>
+             {% endif %}
+
+            <td>{{ object.stock_reel }}</td>
+            <td><form method="POST" action="{% url 'order' %}">{% csrf_token %}<button class="btn btn-primary" type="submit" name="orderid" value="{{ object.id }}"><i class="fas fa-box-open"></i></button></form></td>
+          </tr>
+          
+        {% endif %}
+        {% endif %}
+      {% endfor %}
+    </tbody>
+
+  </table>
+  {% endif %}
+
+
+  {% if products %}
+  <table class="table table-hover table-striped ">
+    <thead>
+      <tr>
+        <th scope="col">ID<button type="button" class="btn btn-outline-light"><i class="fas fa-sort"></i></button></th>
+        <th scope="col">Image<button type="button" class="btn btn-outline-light" disabled><i class="fas fa-sort"></th>
+        <th scope="col">Nom<button type="button" class="btn btn-outline-light"><i class="fas fa-sort"></i></button></th>
+        <th scope="col">Prix<button type="button" class="btn btn-outline-light"><i class="fas fa-sort"></i></button></th>
+        <th scope="col">Quantité<button type="button" class="btn btn-outline-light"><i class="fas fa-sort"></i></button></th>
+        <th scope="col">Commander<button type="button" class="btn btn-outline-light" disabled><i class="fas fa-sort"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for object in products %}
+        {% if object.id is null %}
+        <tr style="background-color: #eda49f;">
+          <th scope="row"></th>
+          <td>{{ object }}</td>
+        </tr>
+        {% else %}
+          {% if object.stock_reel is null or object.stock_reel == 0 %}
+           <tr>
+              <th scope="row">{{ object.id }}</th>
+              <th scope="row"><img class="img-thumbnail" style="width: 70px;" src="https://tp3dolibarr.s3.ca-central-1.amazonaws.com/cloudImg/{{ object.ref }}.jpg"/></th>
+              <td>{{ object.label }}</td>
+
+             {% if object.price_base_type is null %}
+              <td> {{ object.price|floatformat:2 }}$</td>
+             {% else %}
+              <td> {{ object.price|floatformat:2 }}$</td>
+             {% endif %}
+
+            <td style="color: #ff040f;"> 0 </td>
+            <td><form method="POST" action="{% url 'order' %}">{% csrf_token %}<button class="btn btn-primary" type="submit" name="orderid" value="{{ object.id }}" disabled><i class="fas fa-box-open"></i></button></form></td>
+          </tr>
+        {% else %}
+          <tr>
+            <th scope="row">{{ object.id }}</th>
+            <th scope="row"><img class="img-thumbnail" style="width: 70px;" src="https://tp3dolibarr.s3.ca-central-1.amazonaws.com/cloudImg/{{ object.ref }}.jpg"/></th>
+            <td>{{ object.label }}</td>
+
+             {% if object.price_base_type is null %}
+              <td> {{ object.price }}$</td>
+             {% else %}
+              <td> {{ object.price|floatformat:2 }}$</td>
+             {% endif %}
+
+            <td>{{ object.stock_reel }}</td>
+            <td><form method="POST" action="{% url 'order' %}">{% csrf_token %}<button class="btn btn-primary" type="submit" name="orderid" value="{{ object.id }}"><i class="fas fa-box-open"></i></button></form></td>
+          </tr>
+          
+        {% endif %}
+        {% endif %}
+      {% endfor %}
+    </tbody>
+
+  </table>
+  {% endif %}
+</div>
+{% include './footer.html' %}
+{% endblock %}

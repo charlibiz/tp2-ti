@@ -1,0 +1,98 @@
+{% extends '../base.html' %}
+
+{% block title %}gestion des utilisateurs{% endblock %}
+
+{% block content %}
+{% include './navbar.html' %}
+
+{{ users }}
+<div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <form
+        style="float: right;"
+          class="form-inline my-3 my-lg-0 "
+          method="POST"
+          action="{% url 'users' %}"
+        >
+          {% csrf_token %}
+          <div class="input-group input-group-lg">
+            <input
+              type="search"
+              class="form-control"
+              placeholder="Produits"
+              name="input"
+              value="{{ current_name }}"
+            />
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+        {% if products %}
+    <table class="table table-striped">
+      <thead class="table-secondary">
+        <tr>
+          <th scope="col" class="col-2">ID</th>
+          <th scope="col" class="col-3">Courriel</th>
+          <th scope="col" class="col-2">Profil</th>
+          <th scope="col" class="col-2">Dernière utilisation</th>
+          <th scope="col" class="col-3">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in products %}
+          {% if object.id is null %}
+          <tr style="background-color: #eda49f;">
+            <th scope="row"></th>
+            <td>{{ object }}</td>
+          </tr>
+          {% else %}
+            <tr>
+              <th scope="row">{{ object.id }}</th>
+              <td>{{ object.label }}</td>
+  
+               {% if object.price_base_type is null %}
+                <td> {{ object.price }}$</td>
+               {% else %}
+                <td> {{ object.price|floatformat:2 }}$</td>
+               {% endif %}
+  
+              <td>{{ object.stock_reel }}</td>
+              <td>
+                  <div class="row justify-content-center">
+                      <div class="col-6">
+                          <form method="POST" action="{% url 'order' %}" >
+                              {% csrf_token %}
+                              <button class="btn btn-info" type="submit" name="orderid" value="{{ object.id }}">
+                                  <i class="fas fa-pen"></i> Réinitialiser
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-6">
+                            <form method="POST" action="{% url 'order' %}" >
+                                {% csrf_token %}
+                                <button class="btn btn-danger" type="submit" name="orderid" value="{{ object.id }}">
+                                    <i class="fas fa-pen"></i> Supprimer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+          {% endif %}
+        {% endfor %}
+      </tbody>
+  
+    </table>
+    {% endif %}
+      </div>
+    </div>
+    <div style="float: right;"><button class="btn btn-success">Ajouter</button></div>
+  </div>
+</div>
+  </div>
+
+{% endblock %}
