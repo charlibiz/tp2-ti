@@ -72,7 +72,7 @@ def register(request):
 
 def register(request):
     if request.method == "GET":
-        return render(request, "fourth_django_app/register.html", {"status": False})
+        return render(request, "django_app/register.html", {"status": False})
     elif request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -80,7 +80,7 @@ def register(request):
         user = User(username=username, password=make_password(password))
         user.save()
 
-        return render(request, "fourth_django_app/register.html", {"status": True})
+        return render(request, "django_app/register.html", {"status": True})
 
 
 @swagger_auto_schema(
