@@ -46,6 +46,7 @@ def register(request):
         profil = request.POST.get("profil")
         print(username + password + gender + town + profil)
         if (profil == "locataire"):
+            user = User(username=username, password=make_password(password))
             user = locataire(username=username, password=make_password(password), gender=gender, town=town)
             user.save()
         if (profil == "locateur"):
