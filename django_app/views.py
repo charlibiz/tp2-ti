@@ -15,7 +15,7 @@ from datetime import datetime
 from drf_yasg.utils import swagger_auto_schema
 
 #from .models import History
-from .serializers import ConvertSerializer, ResultSerializer, LoginSerializer
+from .serializers import locateurSerializer, ResultSerializer, LoginSerializer
 
 # Create your views here.
 user_key = "721aebe0-0232-4326-9e21-1967ad98fff1"
@@ -137,3 +137,15 @@ def logout(request):
 
 def statistics(request):
     return render(request, "django_app/statistics.html")
+
+
+
+# class LocateurviewSet:
+#     permission_classes = [IsAuthenticated]
+    
+#     token_key = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
+#     user = Token.objects.filter(key=token_key).first().user
+
+#     def list(self,request):
+#         locateurs = user.locateur_set.all()
+#         locateur_serializer = locateurSerializer(locateurs , many=True)

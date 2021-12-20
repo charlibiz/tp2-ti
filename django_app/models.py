@@ -7,46 +7,48 @@ from django.contrib.auth.models import User
 
 class Reservation(models.Model):
     id = models.AutoField(primary_key=True)
-    room = models.IntegerField(max_length=50)
-    tenant = models.IntegerField(max_length=50)
-    landlord = models.IntegerField(max_length=50)
-    nbr_persons = models.IntegerField(max_length=50)
-    in_date = models.DateTimeField(max_length=50)
-    out_date =models.DateTimeField(max_length=50)
-    total_price = models.FloatField(max_length=50)
+    room = models.IntegerField()
+    tenant = models.IntegerField()
+    landlord = models.IntegerField()
+    nbr_persons = models.IntegerField()
+    in_date = models.DateField()
+    out_date =models.DateField()
+    total_price = models.FloatField()
     status = models.CharField(max_length=50)
 
-class Utilisateur(models.Model):
-    identifiant = models.AutoField(primary_key=True)
-    first_name= models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    mail_adresse = models.EmailField(max_length=50)
-    birth_date = models.DateTimeField()
-    gender = models.CharField(max_length=50)
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=50)
+# class Utilisateur(models.Model):
+#     identifiant = models.AutoField(primary_key=True)
+#     first_name= models.CharField(max_length=50)
+#     last_name = models.CharField(max_length=50)
+#     mail_adresse = models.EmailField(max_length=50)
+#     birth_date = models.DateTimeField()
+#     gender = models.CharField(max_length=50)
+#     username = models.CharField(max_length=50)
+#     password = models.CharField(max_length=50)
 
 
 
 class Chambre(models.Model):
     id = models.AutoField(primary_key=True)
     reservation = models.OneToOneField("Reservation",on_delete=models.CASCADE)
-    town = models.DateTimeField()
+    town = models.CharField(max_length=50)
     landlord = models.IntegerField()
     capacity = models.IntegerField()
     price = models.FloatField()
 
 
-class locateur(Utilisateur):
-    # id = models.AutoField(primary_key=True)
+class locateur(User):
     chambre = models.ForeignKey("Chambre",on_delete=models.CASCADE)
     benefits = models.FloatField()
+    birth_date = models.DateField()
+    gender = models.CharField(max_length=50)
 
 
-class locataire(Utilisateur):
-    # id = models.AutoField(primary_key=True)
+class locataire(User):
     reservation = models.ForeignKey("Reservation",on_delete=models.CASCADE)
     balance = models.FloatField()
+    birth_date = models.DateField()
+    gender = models.CharField(max_length=50)
 
 
 class ville (models.Model):
