@@ -34,49 +34,13 @@ def users(request):
 
 
 def register(request):
-    if request.method == "POST":
-        gender = request.POST.get("gender")
-        email = request.POST.get("email")
-        address = request.POST.get("address")
-        city = request.POST.get("city")
-        phone = request.POST.get("phone")
-        firstName = request.POST.get("firstName")
-        lastName = request.POST.get("lastName")
-        password = request.POST.get("password")
-        login = request.POST.get("login")
-
-        user = {
-            "id": "",
-            "statut": "1",
-            "employee": "0",
-            "gender": gender,
-            "email": email,
-            "address": address,
-            "town": city,
-            "user_mobile": phone,
-            "login": login,
-            "country_code": "CA",
-            "lastname": lastName,
-            "firstname": firstName,
-            "date_creation": "today",
-            "note_private": password
-            }
-        req = 'requests.post("http://34.95.8.244/api/index.php/users?DOLAPIKEY="+ dolapikey, user)'
-        if req.status_code == 200:
-            return render(request, "django_app/register.html", {"success":1, "id":req.json()})
-        else: 
-            return render(request, "django_app/register.html", {"success":0})
-    return render(request, "django_app/register.html")
-
-
-
-
-def register(request):
     if request.method == "GET":
         return render(request, "django_app/register.html", {"status": False})
     elif request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
+        #gender = request.POST.get("gender")
+        #city = request.POST.get("city")
 
         user = User(username=username, password=make_password(password))
         user.save()
