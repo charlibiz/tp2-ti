@@ -1,6 +1,7 @@
+from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
 from django.conf.urls import url
-from django_app.models import ville
+from django_app.models import ville, locateur, locataire
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from django.core import serializers
@@ -17,7 +18,7 @@ from datetime import datetime
 from drf_yasg.utils import swagger_auto_schema
 
 #from .models import History
-from .serializers import locateurSerializer, villeSerializer, LoginSerializer
+from .serializers import locateurSerializer, LoginSerializer
 
 # Create your views here.
 
@@ -36,15 +37,20 @@ def users(request):
 
 def register(request):
     if request.method == "GET":
-        return render(request, "django_app/register.html", {"status": False})
+        return render(request, "django_app/register.html", {"status": False, "towns": ville.objects.all().values('name')})
     elif request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
-        #gender = request.POST.get("gender")
-        #city = request.POST.get("city")
-
-        user = User(username=username, password=make_password(password))
-        user.save()
+        gender = request.POST.get("gender")
+        town = request.POST.get("town")
+        profil = request.POST.get("profil")
+        print(username + password + gender + town + profil)
+        if (profil == "locataire"):
+            user = locataire(username=username, password=make_password(password), gender=gender, town=town)
+            user.save()
+        if (profil == "locateur"):
+            user = locateur(username=username, password=make_password(password), gender=gender, town=town)
+            user.save()
 
         return render(request, "django_app/register.html", {"status": True})
 
@@ -107,7 +113,6 @@ def statistics(request):
 @swagger_auto_schema(method="get", tags=["Villes"])
 @api_view(["GET"])
 def towns(request):
-    #print(ville.objects.all())
     all_towns = ville.objects.all().values('name')
     return Response(
                     all_towns, status=status.HTTP_200_OK

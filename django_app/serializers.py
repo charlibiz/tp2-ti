@@ -9,11 +9,6 @@ class locateurSerializer(serializers.ModelSerializer):
        fields = {"username", "password", "first_name", "last_name", "email", "birth_date", "gender", "chambre", "balance"}
 
 
-class villeSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ville
-        fields = ("id", "name")
-
 class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

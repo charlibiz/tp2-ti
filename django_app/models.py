@@ -48,6 +48,7 @@ class locateur(User):
     chambre = models.ForeignKey("Chambre",on_delete=models.CASCADE)
     benefits = models.FloatField()
     birth_date = models.DateField()
+    town = models.CharField(max_length=50)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
 
@@ -59,6 +60,7 @@ class locataire(User):
     reservation = models.ForeignKey("Reservation",on_delete=models.CASCADE)
     balance = models.FloatField()
     birth_date = models.DateField()
+    town = models.CharField(max_length=50)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
 

@@ -24,12 +24,32 @@
           </div>
           
           <div class="mb-3">
-            <select class="form-select">
+            <select class="form-select" name="profil" >
               <option selected>Sélectionnez un profil</option>
-              <option value="2">Locataire</option>
-              <option value="3">Locateur</option>
+              <option value="locataire">Locataire</option>
+              <option value="locateur">Locateur</option>
             </select>
           </div>
+
+          <div class="mb-3">
+            <select class="form-select" name="gender" >
+              <option selected>Genre</option>
+              <option value="M">Masculin</option>
+              <option value="F">Féminin</option>
+            </select>
+          </div>
+
+          
+          <div class="mb-3">
+            <select class="form-select" name="town" >
+              <option selected>Villes</option>
+              {% for object in towns %}
+              
+              <option value={{ object.name }}>{{ object.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
           
           <div class="mb-3">
             <label for="exampleInputPassword1" class="form-label"
