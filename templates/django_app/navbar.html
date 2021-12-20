@@ -3,24 +3,61 @@
 {% block title %}Navbar{% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary" >
-    <a class="navbar-brand" href="{% url 'home' %}"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-  
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home"></i> Home</a>
-        </li>
-        <li class="nav-item">
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'home' %}"><i class="fas fa-home"></i> Accueil</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'users' %}"><i class="fas fa-users"></i> Utilisateurs</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'statistics' %}"><i class="fas fa-chart-bar"></i> Statistiques</a>
           </li>
-      </ul>
+        </ul>
+          <button class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">Login</button>
     </div>
   </nav>
+
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Authetification</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body">
+            <form
+              class=""
+              method="POST"
+              action="{% url 'login' %}"
+            >
+              <div class="mb-3">
+                <label class="form-label"
+                  >Addresse courriel</label
+                >
+                <input type="email" class="form-control" name="username" value="" required/>
+              </div>
+    
+              <div class="mb-3">
+                <label class="form-label"
+                  >Mot de passe</label
+                >
+                <input type="password" class="form-control" name="password" value="" required/>
+              </div>
+              
+              <button type="submit" class="btn btn-primary">Connexion</button>
+            </form>
+            <a href="/register" class="link-primary">Créer un compte</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
   {% endblock %}

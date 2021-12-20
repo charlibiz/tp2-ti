@@ -32,6 +32,7 @@ def users(request):
     else:
         return render(request, "django_app/users.html")
 
+
 def register(request):
     if request.method == "POST":
         gender = request.POST.get("gender")
