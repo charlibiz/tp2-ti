@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from django_app.views import users
+#from django_app.views import users
 # Create your models here. 
 
 
@@ -55,12 +55,12 @@ class locateur(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
 
-class locataire(models.Model):
+class Locataire(models.Model):
     GENDER_CHOICES = [
     ('M', 'Male'),
     ('F', 'Female'),
     ]
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     reservation = models.ForeignKey("Reservation",on_delete=models.CASCADE)
     balance = models.FloatField()
     #birth_date = models.DateField()

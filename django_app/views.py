@@ -1,7 +1,7 @@
 from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
 from django.conf.urls import url
-from django_app.models import ville, locateur, locataire
+from django_app.models import ville, locateur, Locataire
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from django.core import serializers
@@ -47,8 +47,9 @@ def register(request):
         print(username + password + gender + town + profil)
         if (profil == "locataire"):
             user = User(username=username, password=make_password(password))
-            user = locataire(username=username, password=make_password(password), gender=gender, town=town)
             user.save()
+            locataire = Locataire(user.pk, gender=gender, town=town)
+            locataire.save()
         if (profil == "locateur"):
             user = locateur(username=username, password=make_password(password), gender=gender, town=town)
             user.save()
