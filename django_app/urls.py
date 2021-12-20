@@ -21,7 +21,7 @@ urlpatterns = [
     path("", home, name="home"),
     path("users", users, name="users"),
     path("register", register, name="register"),
-    path("login", login, name="login"),
+    path("api/login", login, name="login"),
     path("statistics", statistics, name="statistics"),
-    path("swagger", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path("api/swagger", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

@@ -52,7 +52,7 @@ class locataire(Utilisateur):
 class ville (models.Model):
     id = models.AutoField(primary_key=True)
     name = models.FloatField()
-    chambre = models.ForeignKey("Chambre",on_delete=models.CASCADE)
+    #chambre = models.ForeignKey("Chambre",on_delete=models.CASCADE)
 
    
 
