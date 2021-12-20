@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.conf.urls import url
+from django_app.models import ville
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
+from django.core import serializers
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -15,10 +17,9 @@ from datetime import datetime
 from drf_yasg.utils import swagger_auto_schema
 
 #from .models import History
-from .serializers import locateurSerializer, ResultSerializer, LoginSerializer
+from .serializers import locateurSerializer, villeSerializer, LoginSerializer
 
 # Create your views here.
-user_key = "721aebe0-0232-4326-9e21-1967ad98fff1"
 
 def home(request):
     return render(request, "django_app/home.html")
@@ -102,6 +103,15 @@ def logout(request):
 def statistics(request):
     return render(request, "django_app/statistics.html")
 
+
+@swagger_auto_schema(method="get", tags=["Villes"])
+@api_view(["GET"])
+def towns(request):
+    #print(ville.objects.all())
+    all_towns = ville.objects.all().values('name')
+    return Response(
+                    all_towns, status=status.HTTP_200_OK
+                )
 
 
 # class LocateurviewSet:

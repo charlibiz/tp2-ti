@@ -1,11 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here. c72b9904-bbd6-45fd-91d1-1c32690501cc
-
-
+# Create your models here. 
 
 
 class Reservation(models.Model):
+    STATUS_CHOICES = [
+    ('p', 'Pending'),
+    ('A', 'Active'),
+    ('E', 'Expired'),
+    ]
     id = models.AutoField(primary_key=True)
     room = models.IntegerField()
     tenant = models.IntegerField()
@@ -14,7 +17,7 @@ class Reservation(models.Model):
     in_date = models.DateField()
     out_date =models.DateField()
     total_price = models.FloatField()
-    status = models.CharField(max_length=50)
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES)
 
 # class Utilisateur(models.Model):
 #     identifiant = models.AutoField(primary_key=True)
@@ -38,20 +41,28 @@ class Chambre(models.Model):
 
 
 class locateur(User):
+    GENDER_CHOICES = [
+    ('M', 'Male'),
+    ('F', 'Female'),
+    ]
     chambre = models.ForeignKey("Chambre",on_delete=models.CASCADE)
     benefits = models.FloatField()
     birth_date = models.DateField()
-    gender = models.CharField(max_length=50)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
 
 class locataire(User):
+    GENDER_CHOICES = [
+    ('M', 'Male'),
+    ('F', 'Female'),
+    ]
     reservation = models.ForeignKey("Reservation",on_delete=models.CASCADE)
     balance = models.FloatField()
     birth_date = models.DateField()
-    gender = models.CharField(max_length=50)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
 
-class ville (models.Model):
+class ville(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.FloatField()
     #chambre = models.ForeignKey("Chambre",on_delete=models.CASCADE)
