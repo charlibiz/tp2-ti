@@ -5,10 +5,11 @@
 {% block content %}
 {% include './navbar.html' %}
 
-{{ users }}
-<div class="container-fluid">
+
+<div class="container">
     <div class="card">
       <div class="card-body">
+        <h5 class="card-title"><i class="fas fa-users"></i> Utilisateurs</h5>
         <form
         style="float: right;"
           class="form-inline my-3 my-lg-0 "
@@ -16,65 +17,54 @@
           action="{% url 'users' %}"
         >
           {% csrf_token %}
-          <div class="input-group input-group-lg">
-            <input
-              type="search"
-              class="form-control"
-              placeholder="Produits"
-              name="input"
-              value="{{ current_name }}"
-            />
-            <div class="input-group-append">
-              <button class="btn btn-primary" type="submit">
-                <i class="fas fa-search"></i>
-              </button>
-            </div>
-          </div>
+          <select class="form-select" aria-label="Default select example">
+            <option selected value="" >Profil</option>
+            <option value="locataire">Locataire</option>
+            <option value="locateur">Locateur</option>
+          </select>
         </form>
-        {% if products %}
+
+
     <table class="table table-striped">
       <thead class="table-secondary">
         <tr>
-          <th scope="col" class="col-2">ID</th>
+          <th scope="col" class="col-1">ID</th>
           <th scope="col" class="col-3">Courriel</th>
           <th scope="col" class="col-2">Profil</th>
           <th scope="col" class="col-2">Dernière utilisation</th>
-          <th scope="col" class="col-3">Actions</th>
+          <th scope="col" class="col-4">Actions</th>
         </tr>
       </thead>
       <tbody>
-        {% for object in products %}
-          {% if object.id is null %}
-          <tr style="background-color: #eda49f;">
-            <th scope="row"></th>
-            <td>{{ object }}</td>
-          </tr>
-          {% else %}
+        {% for user in users %}
             <tr>
-              <th scope="row">{{ object.id }}</th>
-              <td>{{ object.label }}</td>
-  
-               {% if object.price_base_type is null %}
-                <td> {{ object.price }}$</td>
-               {% else %}
-                <td> {{ object.price|floatformat:2 }}$</td>
-               {% endif %}
-  
-              <td>{{ object.stock_reel }}</td>
+              <th scope="row">{{ user.id }}</th>
+              <td>{{ user.username }}</td>
+              {% for locataire in locataires %}
+              {% if locataire.user_id == user.id %}
+              <td>Locataire</td>
+              {% endif %}
+              {% endfor %}
+              {% for locateur in locateurs %}
+              {% if locateur.user_id == user.id %}
+              <td>Locateur</td>
+              {% endif %}
+              {% endfor %}
+              <td>{{ user.last_login }}</td>
               <td>
                   <div class="row justify-content-center">
                       <div class="col-6">
-                          <form method="POST" action="{% url 'order' %}" >
+                          <form method="POST" action="{% url 'users' %}" >
                               {% csrf_token %}
-                              <button class="btn btn-info" type="submit" name="orderid" value="{{ object.id }}">
+                              <button class="btn btn-info" type="submit" name="orderid" value="{{ user.id }}">
                                   <i class="fas fa-pen"></i> Réinitialiser
                                 </button>
                             </form>
                         </div>
                         <div class="col-6">
-                            <form method="POST" action="{% url 'order' %}" >
+                            <form method="POST" action="{% url 'users' %}" >
                                 {% csrf_token %}
-                                <button class="btn btn-danger" type="submit" name="orderid" value="{{ object.id }}">
+                                <button class="btn btn-danger" type="submit" name="orderid" value="{{ user.id }}">
                                     <i class="fas fa-pen"></i> Supprimer
                                 </button>
                             </form>
@@ -82,14 +72,12 @@
                     </div>
                 </td>
             </tr>
-          {% endif %}
         {% endfor %}
       </tbody>
   
     </table>
-    {% endif %}
-      </div>
-    </div>
+
+
     <form
         style="float: right;"
           class="form-inline my-3 my-lg-0 "
@@ -99,6 +87,11 @@
           {% csrf_token %}
           <button class="btn btn-success" type="submit"><i class="fas fa-plus"></i> Ajouter</button>
         </form>
+
+
+      </div>
+    </div>
+    
   </div>
 </div>
 </div>

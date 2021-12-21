@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, users, register, login, statistics, towns
+from .views import home, users, register, login, statistics, towns, user
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -24,5 +24,6 @@ urlpatterns = [
     path("api/login", login, name="login"),
     path("statistics", statistics, name="statistics"),
     path("api/towns", towns, name="towns"),
+    path("api/user", user, name="user"),
     path("api/swagger", schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

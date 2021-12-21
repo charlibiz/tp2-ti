@@ -1,7 +1,7 @@
 from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
 from django.conf.urls import url
-from django_app.models import ville, locateur, Locataire
+from django_app.models import ville, Locateur, Locataire
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from django.core import serializers
@@ -18,7 +18,7 @@ from datetime import datetime
 from drf_yasg.utils import swagger_auto_schema
 
 #from .models import History
-from .serializers import locateurSerializer, LoginSerializer
+from .serializers import LoginSerializer
 
 # Create your views here.
 
@@ -32,7 +32,7 @@ def users(request):
         return render(request, "django_app/users.html")
 
     else:
-        return render(request, "django_app/users.html")
+        return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
 
 
 def register(request):
@@ -44,15 +44,16 @@ def register(request):
         gender = request.POST.get("gender")
         town = request.POST.get("town")
         profil = request.POST.get("profil")
-        print(username + password + gender + town + profil)
         if (profil == "locataire"):
             user = User(username=username, password=make_password(password))
             user.save()
             locataire = Locataire(user.pk, gender=gender, town=town)
             locataire.save()
         if (profil == "locateur"):
-            user = locateur(username=username, password=make_password(password), gender=gender, town=town)
+            user = User(username=username, password=make_password(password))
             user.save()
+            locateur = Locateur(user.pk, gender=gender, town=town)
+            locateur.save()
 
         return render(request, "django_app/register.html", {"status": True})
 
@@ -121,12 +122,19 @@ def towns(request):
                 )
 
 
-# class LocateurviewSet:
-#     permission_classes = [IsAuthenticated]
-    
-#     token_key = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
-#     user = Token.objects.filter(key=token_key).first().user
 
-#     def list(self,request):
-#         locateurs = user.locateur_set.all()
-#         locateur_serializer = locateurSerializer(locateurs , many=True)
+@swagger_auto_schema(method="get", tags=["Utilisateur"])
+@swagger_auto_schema(method="put", tags=["Utilisateur"])
+@api_view(["GET", "PUT"])
+def user(request):
+    token = Token.objects.filter(user=user.first())
+    id = token.user_id
+    user = User.objects.filter(id=id)
+    if (Locataire.objects.filter(user_id=id)):
+        profil = Locataire.objects.filter(user_id=id).profil
+    if (Locateur.objects.filter(user_id=id)):
+        profil = Locateur.objects.filter(user_id=id).profil
+    return Response(
+                    user, profil, status=status.HTTP_200_OK
+                )
+

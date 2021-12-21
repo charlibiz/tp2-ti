@@ -42,15 +42,15 @@ class Chambre(models.Model):
     price = models.FloatField()
 
 
-class locateur(models.Model):
+class Locateur(models.Model):
     GENDER_CHOICES = [
     ('M', 'Male'),
     ('F', 'Female'),
     ]
-    #user = models.ForeignKey(User.pk)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     chambre = models.ForeignKey("Chambre",on_delete=models.CASCADE)
     benefits = models.FloatField()
-    birth_date = models.DateField()
+    #birth_date = models.DateField()
     town = models.CharField(max_length=50)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
 
