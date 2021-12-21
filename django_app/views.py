@@ -22,14 +22,20 @@ from .serializers import LoginSerializer
 
 # Create your views here.
 
+
 def home(request):
     return render(request, "django_app/home.html")
 
+@permission_classes([IsAuthenticated])
 def users(request):
     if request.method == "POST":
-        label = request.POST.get("input")
-        categorieId = request.POST.get("categorieid")
-        return render(request, "django_app/users.html")
+        profil = request.POST.get("profil")
+        if profil == "locataire":
+            return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values()})
+        if profil == "locateur":
+            return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locateurs": Locateur.objects.all().values()})
+        else:
+            return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
 
     else:
         return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
@@ -37,7 +43,7 @@ def users(request):
 
 def register(request):
     if request.method == "GET":
-        return render(request, "django_app/register.html", {"status": False, "towns": ville.objects.all().values('name')})
+        return render(request, "django_app/register.html", {"towns": ville.objects.all().values('name')})
     elif request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -74,11 +80,8 @@ def login(request):
         if auth_success:
             token = Token.objects.filter(user=user.first())
 
-            if token.exists():
-                return Response(
-                    {"token": "Token {}".format(token.first().key)},
-                    status=status.HTTP_200_OK,
-                )
+            if token.exists(): 
+                return render(request, "django_app/home.html", {"token": "Token {}".format(token.first().key)})
             else:
                 token = Token.objects.create(user=user.first())
                 return Response(
@@ -127,8 +130,8 @@ def towns(request):
 @swagger_auto_schema(method="put", tags=["Utilisateur"])
 @api_view(["GET", "PUT"])
 def user(request):
-    token = Token.objects.filter(user=user.first())
-    id = token.user_id
+    token_key = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
+    id = Token.objects.filter(key=token_key).first().user_id
     user = User.objects.filter(id=id)
     if (Locataire.objects.filter(user_id=id)):
         profil = Locataire.objects.filter(user_id=id).profil

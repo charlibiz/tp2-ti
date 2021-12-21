@@ -17,8 +17,9 @@
           action="{% url 'users' %}"
         >
           {% csrf_token %}
-          <select class="form-select" aria-label="Default select example">
+          <select class="form-select mb-3" name="profil" onchange="this.form.submit()">
             <option selected value="" >Profil</option>
+            <option value="all" >Tous</option>
             <option value="locataire">Locataire</option>
             <option value="locateur">Locateur</option>
           </select>
@@ -37,42 +38,69 @@
       </thead>
       <tbody>
         {% for user in users %}
+        {% for locataire in locataires %}
+        {% if locataire.user_id == user.id %}
             <tr>
               <th scope="row">{{ user.id }}</th>
               <td>{{ user.username }}</td>
-              {% for locataire in locataires %}
-              {% if locataire.user_id == user.id %}
               <td>Locataire</td>
-              {% endif %}
-              {% endfor %}
-              {% for locateur in locateurs %}
-              {% if locateur.user_id == user.id %}
-              <td>Locateur</td>
-              {% endif %}
-              {% endfor %}
               <td>{{ user.last_login }}</td>
               <td>
-                  <div class="row justify-content-center">
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <form method="POST" action="{% url 'users' %}" >
+                            {% csrf_token %}
+                            <button class="btn btn-info" type="submit" name="orderid" value="{{ user.id }}">
+                                <i class="fas fa-pen"></i> Réinitialiser
+                              </button>
+                          </form>
+                      </div>
                       <div class="col-6">
                           <form method="POST" action="{% url 'users' %}" >
                               {% csrf_token %}
-                              <button class="btn btn-info" type="submit" name="orderid" value="{{ user.id }}">
-                                  <i class="fas fa-pen"></i> Réinitialiser
-                                </button>
-                            </form>
-                        </div>
-                        <div class="col-6">
-                            <form method="POST" action="{% url 'users' %}" >
-                                {% csrf_token %}
-                                <button class="btn btn-danger" type="submit" name="orderid" value="{{ user.id }}">
-                                    <i class="fas fa-pen"></i> Supprimer
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        {% endfor %}
+                              <button class="btn btn-danger" type="submit" name="orderid" value="{{ user.id }}">
+                                  <i class="fas fa-pen"></i> Supprimer
+                              </button>
+                          </form>
+                      </div>
+                  </div>
+              </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+
+          {% for locateur in locateurs %}
+          {% if locateur.user_id == user.id %}
+            <tr>
+              <th scope="row">{{ user.id }}</th>
+              <td>{{ user.username }}</td>
+              <td>Locateur</td>
+              <td>{{ user.last_login }}</td>
+              <td>
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <form method="POST" action="{% url 'users' %}" >
+                            {% csrf_token %}
+                            <button class="btn btn-info" type="submit" name="orderid" value="{{ user.id }}">
+                                <i class="fas fa-pen"></i> Réinitialiser
+                              </button>
+                          </form>
+                      </div>
+                      <div class="col-6">
+                          <form method="POST" action="{% url 'users' %}" >
+                              {% csrf_token %}
+                              <button class="btn btn-danger" type="submit" name="orderid" value="{{ user.id }}">
+                                  <i class="fas fa-pen"></i> Supprimer
+                              </button>
+                          </form>
+                      </div>
+                  </div>
+              </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+
+          {% endfor %}
       </tbody>
   
     </table>
