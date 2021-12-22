@@ -1,7 +1,7 @@
 from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
 from django.conf.urls import url
-from .models import ville, Locateur, Locataire
+from ui_app.models import ville, Locateur, Locataire
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from django.core import serializers
@@ -31,14 +31,16 @@ def users(request):
     if request.method == "POST":
         profil = request.POST.get("profil")
         if profil == "locataire":
-            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values()})
+            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(),"towns": ville.objects.all().values('name')})
         if profil == "locateur":
-            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locateurs": Locateur.objects.all().values()})
+            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locateurs": Locateur.objects.all().values(),"towns": ville.objects.all().values('name')})
         else:
-            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
+            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values(),"towns": ville.objects.all().values('name')})
 
     else:
-        return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
+        return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values(),
+        "towns": ville.objects.all().values('name')
+        })
 
 
 def register(request):
