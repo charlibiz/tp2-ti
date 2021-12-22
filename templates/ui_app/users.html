@@ -101,7 +101,16 @@
       </table>
 
 
-      <form style="text-align: center;" class="form-inline my-3 my-lg-0 " method="POST" action="{% url 'register' %}">
+      <form style="text-align: center;" class="form-inline my-3 my-lg-0 " method="POST" action="{% url 'ajouter' %}">
+        <div class="form-group row">
+          <div class="col-sm-3">
+            {% if status %}
+            <div class="alert alert-success" role="alert">
+              L'utilisateur a été créé avec succès !
+            </div>
+            {% endif %}
+          </div>
+        </div>
 
         {% csrf_token %}
         <div class="row">
@@ -129,7 +138,7 @@
               <option selected>Villes</option>
               {% for object in towns %}
 
-              <option value="{{ object.name }}">{{ object.name }}</option>
+              <option value={{ object.name }}>{{ object.name }}</option>
               {% endfor %}
             </select>
           </div>

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, users, register, login, logout, statistics, towns, user
+from .views import home, users, register, login, logout, statistics, towns, user, ajouter
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -21,6 +21,7 @@ urlpatterns = [
     path("", home, name="home"),
     path("users", users, name="users"),
     path("register", register, name="register"),
+    path("ajouter", ajouter, name="ajouter"),
     #path("api/login", login, name="login"),
     #path("api/logout", logout, name="logout"),
     path("statistics", statistics, name="statistics"),

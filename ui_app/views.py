@@ -29,8 +29,16 @@ def home(request):
 @permission_classes([IsAuthenticated])
 def users(request):
     if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        gender = request.POST.get("gender")
+        town = request.POST.get("town")
         profil = request.POST.get("profil")
         if profil == "locataire":
+            user = User(username=username, password=make_password(password))
+            user.save()
+            locataire = Locataire(user.pk, gender=gender, town=town)
+            locataire.save()
             return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(),"towns": ville.objects.all().values('name')})
         if profil == "locateur":
             return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locateurs": Locateur.objects.all().values(),"towns": ville.objects.all().values('name')})
@@ -64,6 +72,28 @@ def register(request):
             locateur.save()
 
         return render(request, "ui_app/register.html", {"status": True})
+        
+def ajouter(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        gender = request.POST.get("gender")
+        town = request.POST.get("town")
+        profil = request.POST.get("profil")
+        if (profil == "locataire"):
+            user = User(username=username, password=make_password(password))
+            user.save()
+            locataire = Locataire(user, gender=gender, town=town)
+            locataire.save()
+        if (profil == "locateur"):
+            user = User(username=username, password=make_password(password))
+            user.save()
+            locateur = Locateur(user, gender=gender, town=town)
+            locateur.save()
+
+        return render(request, "ui_app/users.html", {"status": True})
+    else :
+        return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values(),"towns": ville.objects.all().values('name')})
 
 
 
