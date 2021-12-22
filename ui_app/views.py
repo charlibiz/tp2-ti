@@ -64,9 +64,7 @@ def register(request):
         return render(request, "ui_app/register.html", {"status": True})
 
 
-@swagger_auto_schema(
-    method="post", tags=["Authentication"], request_body=LoginSerializer
-)
+
 @api_view(["POST"])
 def login(request):
     username = request.data["username"]
@@ -81,7 +79,7 @@ def login(request):
             token = Token.objects.filter(user=user.first())
 
             if token.exists(): 
-                return render(request, "ui_app/home.html", {"token": "Token {}".format(token.first().key)})
+                return redirect(request, "ui_app/home.html", {"token": "Token {}".format(token.first().key)})
             else:
                 token = Token.objects.create(user=user.first())
                 return Response(
@@ -99,7 +97,6 @@ def login(request):
         )
 
 
-@swagger_auto_schema(method="get", tags=["Authentication"])
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def logout(request):
@@ -116,7 +113,6 @@ def statistics(request):
     return render(request, "ui_app/statistics.html")
 
 
-@swagger_auto_schema(method="get", tags=["Villes"])
 @api_view(["GET"])
 def towns(request):
     all_towns = ville.objects.all().values('name')
@@ -125,9 +121,6 @@ def towns(request):
                 )
 
 
-
-@swagger_auto_schema(method="get", tags=["Utilisateur"])
-@swagger_auto_schema(method="put", tags=["Utilisateur"])
 @api_view(["GET", "PUT"])
 def user(request):
     token_key = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
