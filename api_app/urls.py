@@ -4,25 +4,24 @@ from rest_framework import routers
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from .views import UserViewSet, LocalViewSet, ReservationViewSet
+from .views import user, rooms
 
 schema_view = get_schema_view( 
     openapi.Info(
-        title="Réservation de salles de réunion",
+        title="Swagger TP2",
         default_version="v1.0",
-        description="Application pour l'examen",
+        description="Application pour l'api du TP2",
     ),
     public=True,
 )
 
 router = routers.DefaultRouter()
 # compléter ...
-router.register("user", UserViewSet, basename="user")
-router.register("local", LocalViewSet, basename="local")
-router.register("reservation", ReservationViewSet, basename="reservation")
+#router.register("user", UserViewSet, basename="user")
 
 urlpatterns = [
-    path("", include(router.urls), name="api"),
+    path("user/", user, name="user"),
+    path("rooms", rooms, name="rooms"),
     path(
         "swagger",
         schema_view.with_ui("swagger", cache_timeout=0),
