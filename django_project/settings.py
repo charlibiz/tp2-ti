@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'fontawesome_free',
     'drf_yasg',
     # our apps
-    "django_app.apps.DjangoAppConfig",
+    "ui_app.apps.UIAppConfig",
+    "api_app.apps.APIAppConfig",
 ]
 
 REST_FRAMEWORK = {

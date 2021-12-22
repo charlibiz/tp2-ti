@@ -1,7 +1,7 @@
 from django.http.request import HttpRequest
 from django.shortcuts import render, redirect
 from django.conf.urls import url
-from django_app.models import ville, Locateur, Locataire
+from .models import ville, Locateur, Locataire
 from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password, check_password
 from django.core import serializers
@@ -24,26 +24,26 @@ from .serializers import LoginSerializer
 
 
 def home(request):
-    return render(request, "django_app/home.html")
+    return render(request, "ui_app/home.html")
 
 @permission_classes([IsAuthenticated])
 def users(request):
     if request.method == "POST":
         profil = request.POST.get("profil")
         if profil == "locataire":
-            return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values()})
+            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values()})
         if profil == "locateur":
-            return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locateurs": Locateur.objects.all().values()})
+            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locateurs": Locateur.objects.all().values()})
         else:
-            return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
+            return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
 
     else:
-        return render(request, "django_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
+        return render(request, "ui_app/users.html", {"users": User.objects.all().values(), "locataires": Locataire.objects.all().values(), "locateurs": Locateur.objects.all().values()})
 
 
 def register(request):
     if request.method == "GET":
-        return render(request, "django_app/register.html", {"towns": ville.objects.all().values('name')})
+        return render(request, "ui_app/register.html", {"towns": ville.objects.all().values('name')})
     elif request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -61,7 +61,7 @@ def register(request):
             locateur = Locateur(user.pk, gender=gender, town=town)
             locateur.save()
 
-        return render(request, "django_app/register.html", {"status": True})
+        return render(request, "ui_app/register.html", {"status": True})
 
 
 @swagger_auto_schema(
@@ -81,7 +81,7 @@ def login(request):
             token = Token.objects.filter(user=user.first())
 
             if token.exists(): 
-                return render(request, "django_app/home.html", {"token": "Token {}".format(token.first().key)})
+                return render(request, "ui_app/home.html", {"token": "Token {}".format(token.first().key)})
             else:
                 token = Token.objects.create(user=user.first())
                 return Response(
@@ -113,7 +113,7 @@ def logout(request):
     )
 
 def statistics(request):
-    return render(request, "django_app/statistics.html")
+    return render(request, "ui_app/statistics.html")
 
 
 @swagger_auto_schema(method="get", tags=["Villes"])
